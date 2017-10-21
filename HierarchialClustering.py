@@ -63,11 +63,18 @@ def findMin(clusterMatrix):
             if clusterMatrix[row][column] == 0.0:
                 continue
             if clusterMatrix[row][column] < min:
-                min = clusterMatrix[row][column]
-                p1 = row
-                p2 = column
+                flag = False
+                for cluster in clusters:                #Here we check if the two points aren't in the same cluster
+                    if row in cluster and column in cluster:
+                        flag = True
+                if flag == True:
+                    continue
+                else:
+                    min = clusterMatrix[row][column]
+                    p1 = row
+                    p2 = column
 
     return min, p1, p2
 
-#min, p1, p2 = findMin(clusterMatrix)
-#print(min, ' ', p1, ' ', p2)
+min, p1, p2 = findMin(clusterMatrix)
+print(min, ' ', p1, ' ', p2)
