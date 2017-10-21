@@ -76,5 +76,8 @@ def findMin(clusterMatrix):
 
     return min, p1, p2
 
-min, p1, p2 = findMin(clusterMatrix)
-print(min, ' ', p1, ' ', p2)
+while(len(clusters) > 1):
+    min, p1, p2 = findMin(clusterMatrix)
+    clusters = merge(p1, p2)
+    print(len(clusters))
+print(clusters)
