@@ -44,8 +44,6 @@ def merge(p1, p2):
     clusters.pop(p2)
 
 def updateDistanceMatrix(p1, p2):
-    p1 = p1
-    p2 = p2
     row1 = distanceMatrix[p1]
     row2 = distanceMatrix[p2]
     row3 = np.minimum(row1, row2)
