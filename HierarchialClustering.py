@@ -18,6 +18,8 @@ Create a data matrix consisting of all the gene attributes
 Create a separate true_values column containing all the ground truth
 """
 
+k = 2
+
 matrix = [[0 for x in range(columns)] for y in range(rows)]
 for row in range(rows):
     for column in range(columns):
@@ -33,24 +35,26 @@ distanceMatrix = euclidean_distances(matrix, matrix)
 
 clusters = []
 for i in range(rows):
-    clusters.append([i+1])
+    clusters.append([i])
 
 
 # This method merges lists containing the following numbers
 def merge(p1, p2):
-    newCluster = []
-    newClusters = []
-    for cluster in clusters:
-        if p1 in cluster and p2 in cluster:
-            break
-        elif p1 in cluster:
-            newCluster += cluster
-        elif p2 in cluster:
-            newCluster += cluster
-        else:
-            newClusters.append(cluster)
-    newClusters.append(newCluster)
-    return newClusters
+    clusters[p1] = clusters[p1]+clusters[p2]
+    clusters.pop(p2)
+
+def updateDistanceMatrix(p1, p2):
+    p1 = p1-1
+    p2 = p2-1
+    row1 = distanceMatrix[p1]
+    row2 = distanceMatrix[p2]
+    row3 = np.minimum(row1, row2)
+    col1 = np.transpose(row3)
+    distanceMatrix[p1] = row3
+    distanceMatrix[:, p1] = col1
+    newMatrix = np.delete(distanceMatrix, p2, 0)
+    newMatrix = np.delete(newMatrix, p2, 1)
+    return newMatrix
 
 
 def findMin():
@@ -58,25 +62,19 @@ def findMin():
     p1 = 0
     p2 = 0
     for row in range(distanceMatrix.shape[0]):
-        for column in range(distanceMatrix.shape[1]):
-            if distanceMatrix[row][column] == 0.0:
-                continue
+        for column in range(row+1, distanceMatrix.shape[1]):
             if distanceMatrix[row][column] < min:
-                flag = False
-                for cluster in clusters:  # Here we check if the two points aren't in the same cluster
-                    if row+1 in cluster and column+1 in cluster:
-                        flag = True
-                if flag == True:
-                    continue
-                else:
-                    min = distanceMatrix[row][column]
-                    p1 = row+1
-                    p2 = column+1
+                min = distanceMatrix[row][column]
+                p1 = row
+                p2 = column
     return min, p1, p2
 
-while(len(clusters) > 5):
+
+
+while(len(clusters) > k):
      min, p1, p2 = findMin()
-     clusters = merge(p1, p2)
+     distanceMatrix = updateDistanceMatrix(p1, p2)
+     merge(p1, p2)
      print(len(clusters))
 print(clusters)
 
@@ -99,7 +97,7 @@ def plotOriginalGraph(true_values):
     plt.legend()
     plt.show()
 
-#plotOriginalGraph(true_values)
+plotOriginalGraph(true_values)
 
 
 groundTruth = [[0 for x in range(rows)] for y in range(rows)]
@@ -143,4 +141,4 @@ for i in range(len(clusters)):
     for element in clusters[i]:
         true_values[element-1] = i+1
 
-#plotOriginalGraph(true_values)
+plotOriginalGraph(true_values)
