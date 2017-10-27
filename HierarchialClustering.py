@@ -112,7 +112,6 @@ while len(clusters) > k:
      distanceMatrix = updateDistanceMatrix(p1, p2)
      merge(p1, p2)
 
-
 groundTruth = [[0 for x in range(rows)] for y in range(rows)]
 groundTruth = np.array(groundTruth)
 for row in range(groundTruth.shape[0]):
@@ -127,7 +126,7 @@ clusterTruth = np.array(clusterTruth)
 for row in range(rows):
     for column in range(rows):
         for cluster in clusters:
-            if row+1 in cluster and column+1 in cluster:
+            if row in cluster and column in cluster:
                 clusterTruth[row][column] = 1
 
 m11 = 0
