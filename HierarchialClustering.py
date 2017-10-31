@@ -7,13 +7,13 @@ from sklearn.metrics.pairwise import euclidean_distances
 """
 Specify the final number of clusters you want
 """
-k = 2
+k = 5
 
 """
 Read the input file and get the number of rows and columns
 """
 
-file = open("../../Desktop/new_dataset_2.txt")
+file = open("../../Desktop/cho.txt")
 lines = file.readlines()
 rows = len(lines)
 columns = len(lines[0].split("\t")) - 1
@@ -151,8 +151,11 @@ print("For k = ", k);
 print('Rand Index: ', rIndex)
 print('Jaccard Coefficient: ', jCoefficient,'\n')
 
+
 for i in range(len(clusters)):
+    clusters[i] = list(map(lambda x : x + 1, clusters[i]))
+    print("Cluster ",i,":",clusters[i])
     for element in clusters[i]:
-        true_values[element] = i+1
+        true_values[element-1] = i+1
 
 plotOriginalGraph(true_values)
