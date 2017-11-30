@@ -13,7 +13,7 @@ k = 5
 Read the input file and get the number of rows and columns
 """
 
-file = open("../../Desktop/cho.txt")
+file = open("cho.txt")
 lines = file.readlines()
 rows = len(lines)
 columns = len(lines[0].split("\t")) - 1
